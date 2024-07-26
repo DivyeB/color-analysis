@@ -1,2 +1,2 @@
-### Clone for editing
-git clone https://github.com/DivyeB/gemini.git
+### Work in progress ..
+
