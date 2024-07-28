@@ -1,32 +1,42 @@
 require('dotenv').config();
 const express = require('express');
-const app = express();
+const path = require('path');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+const app = express();
 
+app.use(cors());
 app.use(bodyParser.json());
 
-async function run(res) { 
-  const prompt = "generate all colors included in different types of seasonal color palette";
+app.use(express.static(path.join(__dirname, 'public')));
 
-  try {
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+app.post('/colors', async (req, res) => {
+    const { faceColor, hairColor, eyeColor } = req.body;
+    const colors = {
+        faceColor,
+        hairColor,
+        eyeColor
+    };
+    const prompt = `describe these colors: Face Color ${colors.faceColor}, Hair Color ${colors.hairColor}, Eye Color ${colors.eyeColor}`;
 
-  
-    res.send(text); 
-  } catch (error) {
-    console.error("Error generating content:", error);
-    res.status(500).send("An error occurred while processing the request.");
-  }
-}
+    try {
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = await response.text();
 
-app.get('/', async (req, res) => {
-  await run(res); 
+        res.send(text);
+    } catch (error) {
+        console.error("Error generating content:", error);
+        res.status(500).send("An error occurred while processing the request.");
+    }
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 4000;
