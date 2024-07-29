@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+</head>
+<body>
+    <h1>Results</h1>
+    <div id="results">Waiting for results...</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const result = localStorage.getItem('result');
+    if (result) {
+        document.getElementById('results').innerText = result;
+    } else {
+        document.getElementById('results').innerText = 'No results available.';
+    }
+});
+    </script>
+</body>
+</html>
