@@ -12,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname+'/public'));
 
 app.post('/colors', async (req, res) => {
     const { faceColor, hairColor, eyeColor } = req.body;
@@ -21,7 +21,21 @@ app.post('/colors', async (req, res) => {
         hairColor,
         eyeColor
     };
-    const prompt = `describe these colors: Face Color ${colors.faceColor}, Hair Color ${colors.hairColor}, Eye Color ${colors.eyeColor}`;
+    const prompt = `Analyze the provided hex color codes for skin, hair, and eyes to determine the individual's color season according to seasonal color analysis principles. Output the results in JSON format with the following keys:
+                    colorSeason: The determined color season (e.g., "Deep Autumn").
+                    colorPalette: A concise description of the individual's color palette, emphasizing undertones, chroma, and value.
+                    seasonDescription: A brief overview of the color season, focusing on key characteristics and suitable/unsuitable colors.
+                    Example input:
+
+                    Skin: #F2E8D9, Hair: #604A2B, Eyes: #324C64
+                    Expected output:
+                    JSON
+                    {
+                    "colorSeason": "Deep Autumn",
+                    "colorPalette": "Warm, deep, golden undertones, high chroma, medium-deep value.",
+                    "seasonDescription": "Rich, warm colors. Best: deep reds, oranges, golds, browns. Avoid: bright, cool, light shades."
+                    }
+                    now generate for colors: Face Color ${colors.faceColor}, Hair Color ${colors.hairColor}, Eye Color ${colors.eyeColor}`;
 
     try {
         const result = await model.generateContent(prompt);
@@ -36,7 +50,7 @@ app.post('/colors', async (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(__dirname+ '/public/index.html');
 });
 
 const PORT = process.env.PORT || 4000;
