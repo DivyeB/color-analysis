@@ -21,20 +21,21 @@ app.post('/colors', async (req, res) => {
         hairColor,
         eyeColor
     };
-    const prompt = `Analyze the provided hex color codes for skin, hair, and eyes to determine the individual's color season according to seasonal color analysis principles. Output the results in JSON format with the following keys:
-                    colorSeason: The determined color season (e.g., "Deep Autumn").
-                    colorPalette: A concise description of the individual's color palette, emphasizing undertones, chroma, and value.
-                    seasonDescription: A brief overview of the color season, focusing on key characteristics and suitable/unsuitable colors.
-                    Example input:
+    const prompt = `Provide a JSON object containing the following information, derived from the provided image:
 
-                    Skin: #F2E8D9, Hair: #604A2B, Eyes: #324C64
-                    Expected output:
-                    JSON
-                    {
-                    "colorSeason": "Deep Autumn",
-                    "colorPalette": "Warm, deep, golden undertones, high chroma, medium-deep value.",
-                    "seasonDescription": "Rich, warm colors. Best: deep reds, oranges, golds, browns. Avoid: bright, cool, light shades."
-                    }
+"personal_color": An object with keys:
+"season": The determined seasonal color analysis (e.g., "Winter", "Summer", "Autumn", "Spring").
+"description": A general description of the person's color palette (e.g., "Cool and contrasting colors").
+"skin_undertone": An object with keys:
+"type": The determined skin undertone (e.g., "warm", "cool", "neutral").
+"description": A general description of the skin undertone (e.g., "Warm with golden undertones").
+"hair_color": An object with keys:
+"color_family": The general hair color family (e.g., "blonde", "brown", "red", "black").
+"dominant_hex": The dominant hex code of the hair color.
+"eye_color": An object with keys:
+"color_family": The general eye color family (e.g., "blue", "green", "brown", "hazel").
+"dominant_hex": The dominant hex code of the eye color.
+Ensure the JSON is well-formatted and concise. Avoid unnecessary text.
                     now generate for colors: Face Color ${colors.faceColor}, Hair Color ${colors.hairColor}, Eye Color ${colors.eyeColor}`;
 
     try {
