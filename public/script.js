@@ -39,16 +39,15 @@ canvas.addEventListener('mousemove', (event) => {
     const x = event.offsetX;
     const y = event.offsetY;
     const imageData = ctx.getImageData(x, y, 1, 1).data;
-    const rgb = `rgb(${imageData[0]}, ${imageData[1]}, ${imageData[2]})`;
     const hex = rgbToHex(imageData[0], imageData[1], imageData[2]);
     document.getElementById('color-info').innerText = `Color: ${hex}`;
 });
 
 function saver() {
-    let color = document.getElementById('color-info').innerText;
-    splitedColor = color.split(" ");
+    const color = document.getElementById('color-info').innerText;
+    const splitedColor = color.split(" ");
     colorToSave = splitedColor[1];
-    document.getElementById('color-picked').innerText = 'Color Picked: ' + colorToSave;
+    document.getElementById('color-picked').innerHTML = `Color Picked: <span style="color:${colorToSave};">${colorToSave}</span>`;
 }
 
 canvas.addEventListener('click', saver);
@@ -56,25 +55,24 @@ canvas.addEventListener('click', saver);
 document.getElementById('set-facecolor').addEventListener('click', () => {
     facecolor = colorToSave;
     colors.faceColor = facecolor;
-    console.log("Face color:", facecolor);
+    document.getElementById('face-color').innerHTML = `Face Color: <span style="color:${facecolor};">${facecolor}</span>`;
 });
 
 document.getElementById('set-haircolor').addEventListener('click', () => {
     haircolor = colorToSave;
     colors.hairColor = haircolor;
-    console.log("Hair color:", haircolor);
+    document.getElementById('hair-color').innerHTML = `Hair Color: <span style="color:${haircolor};">${haircolor}</span>`;
 });
 
 document.getElementById('set-eyecolor').addEventListener('click', () => {
     eyecolor = colorToSave;
     colors.eyeColor = eyecolor;
-    console.log("Eye color:", eyecolor);
+    document.getElementById('eye-color').innerHTML = `Eye Color: <span style="color:${eyecolor};">${eyecolor}</span>`;
 });
 
 document.getElementById('submit').addEventListener('click', async () => {
     try {
         const serverURL = `${window.location.protocol}//${window.location.host}`;
-        console.log("Server URL:", serverURL);
         const response = await fetch(`${serverURL}/colors`, {
             method: 'POST',
             headers: {
@@ -89,7 +87,9 @@ document.getElementById('submit').addEventListener('click', async () => {
 
         if (response.ok) {
             const result = await response.text();
-            console.log("AI Result:", result);
+            // Redirect to the result page and store result in localStorage
+            localStorage.setItem('result', result);
+            window.location.href = '/result';
         } else {
             console.error("Error fetching AI result:", response.statusText);
         }
