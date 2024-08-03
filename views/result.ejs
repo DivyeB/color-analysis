@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <link href="/styles.css" rel="stylesheet">
+</head>
+<body class="grey lighten-4">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Result</span>
+                <p id="results" class="grey-text">Loading...</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const result = localStorage.getItem('result');
+            if (result) {
+                document.getElementById('results').innerText = result;
+            } else {
+                document.getElementById('results').innerText = 'No results available.';
+            }
+        });
+    </script>
+</body>
+</html>
