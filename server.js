@@ -9,11 +9,21 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 const app = express();
 
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(express.static(__dirname+'/public'));
+// Set EJS as the templating engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
+// Serve the index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Handle POST request for colors
 app.post('/colors', async (req, res) => {
     const { faceColor, hairColor, eyeColor } = req.body;
     const colors = {
@@ -50,8 +60,9 @@ Ensure the JSON is well-formatted and concise. Avoid unnecessary text.
     }
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname+ '/public/index.html');
+// Serve the result page
+app.get('/result', (req, res) => {
+    res.render('result'); // Render the result.ejs template
 });
 
 const PORT = process.env.PORT || 4000;
