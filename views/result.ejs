@@ -12,7 +12,7 @@
         <div class="card">
             <div class="card-content">
                 <span class="card-title">Result</span>
-                <p id="results" class="grey-text">Loading...</p>
+                <div id="results" class="grey-text">Loading...</div>
             </div>
         </div>
     </div>
@@ -20,7 +20,29 @@
         document.addEventListener('DOMContentLoaded', () => {
             const result = localStorage.getItem('result');
             if (result) {
-                document.getElementById('results').innerText = result;
+                try {
+                    const jsonResult = JSON.parse(result);
+                    const resultContainer = document.getElementById('results');
+                    resultContainer.innerHTML = `
+                        <h1>Personal Color</h1>
+                        <p>Season: ${jsonResult.personal_color.season}</p>
+                        <p>Description: ${jsonResult.personal_color.description}</p>
+                        
+                        <h1>Skin Undertone</h1>
+                        <p>Type: ${jsonResult.personal_color.skin_undertone.type}</p>
+                        <p>Description: ${jsonResult.personal_color.skin_undertone.description}</p>
+                        
+                        <h1>Hair Color</h1>
+                        <p>Color Family: ${jsonResult.personal_color.hair_color.color_family}</p>
+                        <p>Dominant Hex: ${jsonResult.personal_color.hair_color.dominant_hex}</p>
+                        
+                        <h1>Eye Color</h1>
+                        <p>Color Family: ${jsonResult.personal_color.eye_color.color_family}</p>
+                        <p>Dominant Hex: ${jsonResult.personal_color.eye_color.dominant_hex}</p>
+                    `;
+                } catch (error) {
+                    document.getElementById('results').innerText = 'Error parsing result.';
+                }
             } else {
                 document.getElementById('results').innerText = 'No results available.';
             }
