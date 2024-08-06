@@ -87,7 +87,6 @@ document.getElementById('submit').addEventListener('click', async () => {
 
         if (response.ok) {
             const result = await response.text();
-            // Redirect to the result page and store result in localStorage
             localStorage.setItem('result', result);
             window.location.href = '/result';
         } else {
@@ -97,6 +96,7 @@ document.getElementById('submit').addEventListener('click', async () => {
         console.error("Error sending request:", error);
     }
 });
+
 
 function rgbToHex(r, g, b) {
     return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`;
