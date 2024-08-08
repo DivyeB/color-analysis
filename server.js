@@ -11,13 +11,13 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname +'/public'));
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views',(__dirname +'/views'));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(__dirname+'/public/index.html');
 });
 
 app.post('/colors', async (req, res) => {
@@ -27,6 +27,7 @@ app.post('/colors', async (req, res) => {
         "personal_color": {
             "season": "The determined seasonal color analysis",
             "description": "A general description of the person's color palette",
+            "suggested_colors": "Suggest some colors based on seasonal color analysis",
             "skin_undertone": {
                 "type": "The determined skin undertone",
                 "description": "A general description of the skin undertone"
@@ -41,18 +42,18 @@ app.post('/colors', async (req, res) => {
             }
         }
     }
-    Use these colors: Face Color ${faceColor}, Hair Color ${hairColor}, Eye Color ${eyeColor}`;
+    Use these colors: Face Color ${faceColor}, Hair Color ${hairColor}, Eye Color ${eyeColor}. The response must be valid JSON with no additional text or comments.`;
 
     try {
         const result = await model.generateContent(prompt);
         const response = await result.response;
         const text = await response.text();
 
-        // Remove ```json``` from the response if present
-        const cleanedText = text.replace(/```json|```/g, '').trim();
-        
-        // Parse the cleaned response as JSON
-        const jsonResponse = JSON.parse(cleanedText);
+        console.log('Generated Text:', text);
+
+        const jsonStart = text.indexOf('{');
+        const jsonEnd = text.lastIndexOf('}');
+        const jsonResponse = JSON.parse(text.slice(jsonStart, jsonEnd + 1));
 
         res.json(jsonResponse);
     } catch (error) {
@@ -63,6 +64,12 @@ app.post('/colors', async (req, res) => {
 
 app.get('/result', (req, res) => {
     res.render('result');
+});
+
+app.get('*', (req, res) => {
+    if (req.originalUrl !== '/result') {
+        res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    }
 });
 
 const PORT = process.env.PORT || 4000;
