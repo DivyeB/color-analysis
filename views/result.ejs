@@ -11,7 +11,7 @@
     <div class="container mt-5">
         <div class="card">
             <div class="card-content">
-                <span class="card-title">Result</span>
+                <h1 class="card-title">Personal Colors</h1>
                 <div id="results" class="grey-text">Loading...</div>
             </div>
         </div>
@@ -24,21 +24,21 @@
                     const jsonResult = JSON.parse(result);
                     const resultContainer = document.getElementById('results');
                     resultContainer.innerHTML = `
-                        <h1>Personal Color</h1>
-                        <p>Season: ${jsonResult.personal_color.season}</p>
-                        <p>Description: ${jsonResult.personal_color.description}</p>
+                        <h3><strong>Season:</strong> ${jsonResult.personal_color.season}</h3>
+                        <p><strong>Description:</strong> ${jsonResult.personal_color.description}</p>
+                        <p><strong>Suggested Colors:</strong> ${jsonResult.personal_color.suggested_colors}</p>
                         
-                        <h1>Skin Undertone</h1>
-                        <p>Type: ${jsonResult.personal_color.skin_undertone.type}</p>
-                        <p>Description: ${jsonResult.personal_color.skin_undertone.description}</p>
+                        <h3>Skin Undertone</h3>
+                        <p><strong>Type:</strong> ${jsonResult.personal_color.skin_undertone.type}</p>
+                        <p><strong>Description:</strong> ${jsonResult.personal_color.skin_undertone.description}</p>
                         
-                        <h1>Hair Color</h1>
-                        <p>Color Family: ${jsonResult.personal_color.hair_color.color_family}</p>
-                        <p>Dominant Hex: ${jsonResult.personal_color.hair_color.dominant_hex}</p>
+                        <h3>Hair Color</h3>
+                        <p><strong>Color Family:</strong> ${jsonResult.personal_color.hair_color.color_family}</p>
+                        <p><strong>Dominant Hex:</strong> ${jsonResult.personal_color.hair_color.dominant_hex}</p>
                         
-                        <h1>Eye Color</h1>
-                        <p>Color Family: ${jsonResult.personal_color.eye_color.color_family}</p>
-                        <p>Dominant Hex: ${jsonResult.personal_color.eye_color.dominant_hex}</p>
+                        <h3>Eye Color</h3>
+                        <p><strong>Color Family:</strong> ${jsonResult.personal_color.eye_color.color_family}</p>
+                        <p><strong>Dominant Hex:</strong> ${jsonResult.personal_color.eye_color.dominant_hex}</p>
                     `;
                 } catch (error) {
                     document.getElementById('results').innerText = 'Error parsing result.';
