@@ -101,3 +101,65 @@ document.getElementById('submit').addEventListener('click', async () => {
 function rgbToHex(r, g, b) {
     return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`;
 }
+
+//GSAP animations
+gsap.from(".card", { opacity: 0, y: 50, duration: 1.5, ease: "power2.out", delay: 0.5 });
+gsap.from(".btn-custom", { scale: 0.8, opacity: 0, duration: 1, stagger: 0.2, ease: "back.out(1.7)", delay: 1 });
+
+// Locomotive Scroll initialization
+const scroll = new LocomotiveScroll({
+    el: document.querySelector('body'),
+    smooth: true,
+    lerp: 0.1,
+});
+
+// WebGL effect on canvas
+const vertexShaderSrc = `
+attribute vec2 a_position;
+void main() {
+    gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+const fragmentShaderSrc = `
+precision mediump float;
+void main() {
+    gl_FragColor = vec4(0.0, 0.8, 1.0, 1.0);
+}`;
+const gl = canvas.getContext("webgl");
+if (gl) {
+    const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(vertexShader, vertexShaderSrc);
+    gl.compileShader(vertexShader);
+
+    const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fragmentShader, fragmentShaderSrc);
+    gl.compileShader(fragmentShader);
+
+    const program = gl.createProgram();
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
+    gl.linkProgram(program);
+    gl.useProgram(program);
+
+    const positionLocation = gl.getAttribLocation(program, "a_position");
+    const positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+        -1, -1,
+         1, -1,
+        -1,  1,
+        -1,  1,
+         1, -1,
+         1,  1,
+    ]), gl.STATIC_DRAW);
+
+    gl.enableVertexAttribArray(positionLocation);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+}
+
+// Smooth scrolling with Locomotive Scroll
+scroll.on("scroll", (position) => {
+    console.log(position.scroll.y);  // For debug purposes, you can remove this line
+});
